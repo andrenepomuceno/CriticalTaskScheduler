@@ -49,4 +49,4 @@ getFreeStack	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-FBSCHED_MAX_TASKS	LITERAL1
+TASKSCHEDULER_MAX_TASKS	LITERAL1

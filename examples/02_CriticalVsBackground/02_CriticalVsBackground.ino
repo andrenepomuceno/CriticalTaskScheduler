@@ -13,12 +13,12 @@
 
 #include <TaskScheduler.h>
 
-#if !FBSCHED_HAS_FREERTOS
+#if !TASKSCHEDULER_HAS_FREERTOS
 #error "This example targets ESP32 (FreeRTOS-enabled cores)."
 #endif
 
-FBScheduler sched;
-FBFreeRTOSCriticalRunner runner(sched, /*stackSize*/ 4096, configMAX_PRIORITIES - 1, /*tickMs*/ 10);
+TSScheduler sched;
+TSFreeRTOSCriticalRunner runner(sched, /*stackSize*/ 4096, configMAX_PRIORITIES - 1, /*tickMs*/ 10);
 
 volatile uint32_t criticalCount = 0;
 volatile uint32_t backgroundCount = 0;
@@ -40,8 +40,8 @@ void telemetry()
     backgroundCount = 0;
 }
 
-FBTask controlTask("control",   50,   controlLoop, /*critical*/ true);
-FBTask telemetryTask("telemetry", 1000, telemetry);
+TSTask controlTask("control",   50,   controlLoop, /*critical*/ true);
+TSTask telemetryTask("telemetry", 1000, telemetry);
 
 void setup()
 {

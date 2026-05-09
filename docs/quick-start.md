@@ -17,11 +17,11 @@ lib_deps = andrenepomuceno/TaskScheduler@^1.0.0
 ```cpp
 #include <TaskScheduler.h>
 
-FBScheduler sched;
+TSScheduler sched;
 
 void heartbeat() { Serial.println("alive"); }
 
-FBTask heartbeatTask("heartbeat", 1000, heartbeat);
+TSTask heartbeatTask("heartbeat", 1000, heartbeat);
 
 void setup() {
     Serial.begin(115200);
@@ -39,7 +39,7 @@ void loop() {
 - A `Task` is a periodic callback (`void()` function pointer) plus stats.
 - A `Scheduler` owns two buckets:
   - **Background** tasks — pumped by `execute()` in `loop()`. Runs **one** earliest-due task per call. This is the cooperative core.
-  - **Critical** tasks — pumped by `executeCritical()`. Runs **all** due tasks per call. Best driven from a dedicated FreeRTOS thread on ESP32 via `FBFreeRTOSCriticalRunner`.
+  - **Critical** tasks — pumped by `executeCritical()`. Runs **all** due tasks per call. Best driven from a dedicated FreeRTOS thread on ESP32 via `TSFreeRTOSCriticalRunner`.
 - Callbacks must be **non-blocking** — never call `delay()`. Use state machines if you need multi-step logic.
 
 ## 4. Next steps

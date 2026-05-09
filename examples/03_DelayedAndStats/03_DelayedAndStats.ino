@@ -8,15 +8,15 @@
 
 #include <TaskScheduler.h>
 
-FBScheduler sched;
+TSScheduler sched;
 
 void fast()  { delayMicroseconds(500); }   // ~0.5 ms work
 void slow()  { delay(3); }                 // ~3 ms work
 void mid()   { delayMicroseconds(1500); }  // ~1.5 ms work
 
-FBTask fastTask("fast", 100, fast);
-FBTask midTask("mid",   250, mid);
-FBTask slowTask("slow", 500, slow);
+TSTask fastTask("fast", 100, fast);
+TSTask midTask("mid",   250, mid);
+TSTask slowTask("slow", 500, slow);
 
 unsigned long lastReport = 0;
 
@@ -46,7 +46,7 @@ void loop()
         sched.printStats(Serial);
 
         // Or read structured stats yourself:
-        const fbsched::TaskStats s = midTask.stats();
+        const taskscheduler::TaskStats s = midTask.stats();
         Serial.print(F("mid avg ms = "));
         Serial.println(s.avgExecutionTime, 3);
     }

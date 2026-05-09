@@ -14,7 +14,7 @@
 
 #include <TaskScheduler.h>
 
-FBScheduler sched;
+TSScheduler sched;
 
 void blink()
 {
@@ -26,8 +26,8 @@ void heartbeat()
     Serial.println(F("alive"));
 }
 
-FBTask blinkTask("blink", 500, blink);
-FBTask heartbeatTask("heartbeat", 1000, heartbeat);
+TSTask blinkTask("blink", 500, blink);
+TSTask heartbeatTask("heartbeat", 1000, heartbeat);
 
 void setup()
 {

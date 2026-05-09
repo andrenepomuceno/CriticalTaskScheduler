@@ -8,14 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-05-09
 
 ### Added
-- Initial public release, extracted from the FullBot V2 firmware.
-- `fbsched::Task` and `fbsched::Scheduler` classes (also exposed as
-  `FBTask` and `FBScheduler` global aliases).
+- Initial public release.
+- `taskscheduler::Task` and `taskscheduler::Scheduler` classes (also exposed as
+  `TSTask` and `TSScheduler` global aliases).
 - Background pump (`Scheduler::execute()`) — runs the single earliest-due
   task per call to avoid loop monopolisation.
 - Critical pump (`Scheduler::executeCritical()`) — runs all due critical
   tasks per call.
-- Optional `fbsched::FreeRTOSCriticalRunner` (ESP32) that drives the
+- Optional `taskscheduler::FreeRTOSCriticalRunner` (ESP32) that drives the
   critical pump on a dedicated FreeRTOS task at a configurable tick.
 - Pluggable `TimeProvider` for tests / non-Arduino hosts.
 - Per-task statistics: runs, last/avg/max/total execution time,

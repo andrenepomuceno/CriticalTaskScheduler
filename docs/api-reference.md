@@ -1,8 +1,8 @@
 # API Reference
 
-All public symbols live in namespace `fbsched`. The convenience aliases
-`FBTask`, `FBScheduler`, and `FBFreeRTOSCriticalRunner` are provided at
-global scope unless you define `FBSCHED_NO_GLOBAL_ALIASES`.
+All public symbols live in namespace `taskscheduler`. The convenience aliases
+`TSTask`, `TSScheduler`, and `TSFreeRTOSCriticalRunner` are provided at
+global scope unless you define `TASKSCHEDULER_NO_GLOBAL_ALIASES`.
 
 ## `Task`
 
@@ -50,7 +50,7 @@ struct TaskStats {
 
 | Method | Description |
 |---|---|
-| `bool addTask(Task* task)` | Register a task in the appropriate bucket. Returns `false` if the bucket is full (`FBSCHED_MAX_TASKS`, default 16). |
+| `bool addTask(Task* task)` | Register a task in the appropriate bucket. Returns `false` if the bucket is full (`TASKSCHEDULER_MAX_TASKS`, default 16). |
 | `bool removeTask(Task* task)` | Unregister. Returns `true` if found. |
 | `void execute()` | Run **one** earliest-due background task. |
 | `void executeCritical()` | Run **every** due critical task. |
@@ -60,7 +60,7 @@ struct TaskStats {
 | `void printStats(Print& out) const` | One-line-per-task report to any `Print` (e.g. `Serial`). |
 | `void setTimeProvider(TimeProvider tp)` | Inject a custom clock. Pass `nullptr` to restore `millis()`. |
 
-## `FreeRTOSCriticalRunner` (ESP32 only, `FBSCHED_HAS_FREERTOS`)
+## `FreeRTOSCriticalRunner` (ESP32 only, `TASKSCHEDULER_HAS_FREERTOS`)
 
 ```cpp
 FreeRTOSCriticalRunner(Scheduler& sched,
@@ -82,5 +82,5 @@ Creates a FreeRTOS task that calls `sched.executeCritical()` every `tickMs`.
 
 | Macro | Default | Effect |
 |---|---|---|
-| `FBSCHED_MAX_TASKS` | 16 | Per-bucket capacity (background and critical). Override via `-D FBSCHED_MAX_TASKS=64`. |
-| `FBSCHED_NO_GLOBAL_ALIASES` | undefined | If defined, suppresses the `FBTask`/`FBScheduler` global aliases. |
+| `TASKSCHEDULER_MAX_TASKS` | 16 | Per-bucket capacity (background and critical). Override via `-D TASKSCHEDULER_MAX_TASKS=64`. |
+| `TASKSCHEDULER_NO_GLOBAL_ALIASES` | undefined | If defined, suppresses the `TSTask`/`TSScheduler` global aliases. |

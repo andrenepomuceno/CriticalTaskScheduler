@@ -8,20 +8,20 @@
 #include <stdint.h>
 
 // Maximum number of tasks per scheduler instance (per category: background and critical).
-// Override at compile time, e.g. -D FBSCHED_MAX_TASKS=64
-#ifndef FBSCHED_MAX_TASKS
-#define FBSCHED_MAX_TASKS 16
+// Override at compile time, e.g. -D TASKSCHEDULER_MAX_TASKS=64
+#ifndef TASKSCHEDULER_MAX_TASKS
+#define TASKSCHEDULER_MAX_TASKS 16
 #endif
 
 #if defined(ARDUINO_ARCH_ESP32)
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#define FBSCHED_HAS_FREERTOS 1
+#define TASKSCHEDULER_HAS_FREERTOS 1
 #else
-#define FBSCHED_HAS_FREERTOS 0
+#define TASKSCHEDULER_HAS_FREERTOS 0
 #endif
 
-namespace fbsched {
+namespace taskscheduler {
 
 // Plain function-pointer callback. Use a free function or capture-less lambda.
 // State should live in globals or static class members; this keeps the library
@@ -143,14 +143,14 @@ public:
     TimeProvider timeProvider() const { return _now; }
 
 private:
-    Task *_tasks[FBSCHED_MAX_TASKS];
+    Task *_tasks[TASKSCHEDULER_MAX_TASKS];
     size_t _count;
-    Task *_criticalTasks[FBSCHED_MAX_TASKS];
+    Task *_criticalTasks[TASKSCHEDULER_MAX_TASKS];
     size_t _criticalCount;
     TimeProvider _now;
 };
 
-#if FBSCHED_HAS_FREERTOS
+#if TASKSCHEDULER_HAS_FREERTOS
 // Optional helper that runs Scheduler::executeCritical() on a dedicated
 // FreeRTOS task at a fixed tick. ESP32-only.
 class FreeRTOSCriticalRunner
@@ -177,16 +177,16 @@ private:
     uint32_t _tickMs;
     TaskHandle_t _handle;
 };
-#endif // FBSCHED_HAS_FREERTOS
+#endif // TASKSCHEDULER_HAS_FREERTOS
 
-} // namespace fbsched
+} // namespace taskscheduler
 
 // Convenience top-level aliases for users who don't want to type the namespace.
-// Define FBSCHED_NO_GLOBAL_ALIASES to suppress.
-#ifndef FBSCHED_NO_GLOBAL_ALIASES
-using FBTask = ::fbsched::Task;
-using FBScheduler = ::fbsched::Scheduler;
-#if FBSCHED_HAS_FREERTOS
-using FBFreeRTOSCriticalRunner = ::fbsched::FreeRTOSCriticalRunner;
+// Define TASKSCHEDULER_NO_GLOBAL_ALIASES to suppress.
+#ifndef TASKSCHEDULER_NO_GLOBAL_ALIASES
+using TSTask = ::taskscheduler::Task;
+using TSScheduler = ::taskscheduler::Scheduler;
+#if TASKSCHEDULER_HAS_FREERTOS
+using TSFreeRTOSCriticalRunner = ::taskscheduler::FreeRTOSCriticalRunner;
 #endif
 #endif

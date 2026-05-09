@@ -12,7 +12,7 @@ Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
 - **Pluggable time source** — inject a fake clock for unit tests; default is `millis()`.
 - **Optional FreeRTOS critical thread** on ESP32, behind `ARDUINO_ARCH_ESP32`.
 
-> Originally extracted from the [FullBot V2 firmware](https://github.com/SolarBotDev/fullbot-firmware) and battle-tested on a real ESP32-S3 robot.
+> Battle-tested on a real ESP32-S3 robot in production.
 
 ## Install
 
@@ -39,13 +39,13 @@ git clone https://github.com/andrenepomuceno/TaskScheduler.git TaskScheduler
 ```cpp
 #include <TaskScheduler.h>
 
-FBScheduler sched;
+TSScheduler sched;
 
 void blink()  { digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); }
 void status() { Serial.println("alive"); }
 
-FBTask blinkTask("blink", 500,  blink);
-FBTask statusTask("status", 1000, status);
+TSTask blinkTask("blink", 500,  blink);
+TSTask statusTask("status", 1000, status);
 
 void setup() {
     Serial.begin(115200);

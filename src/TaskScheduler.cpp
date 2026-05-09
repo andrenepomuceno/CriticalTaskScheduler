@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 #include "TaskScheduler.h"
 
-namespace fbsched {
+namespace taskscheduler {
 
 unsigned long defaultTimeProvider()
 {
@@ -98,7 +98,7 @@ TaskStats Task::stats() const
 Scheduler::Scheduler()
     : _count(0), _criticalCount(0), _now(&defaultTimeProvider)
 {
-    for (size_t i = 0; i < FBSCHED_MAX_TASKS; ++i)
+    for (size_t i = 0; i < TASKSCHEDULER_MAX_TASKS; ++i)
     {
         _tasks[i] = nullptr;
         _criticalTasks[i] = nullptr;
@@ -116,7 +116,7 @@ bool Scheduler::addTask(Task *task)
 
     if (task->isCritical())
     {
-        if (_criticalCount >= FBSCHED_MAX_TASKS)
+        if (_criticalCount >= TASKSCHEDULER_MAX_TASKS)
         {
             return false;
         }
@@ -124,7 +124,7 @@ bool Scheduler::addTask(Task *task)
     }
     else
     {
-        if (_count >= FBSCHED_MAX_TASKS)
+        if (_count >= TASKSCHEDULER_MAX_TASKS)
         {
             return false;
         }
@@ -266,7 +266,7 @@ void Scheduler::setTimeProvider(TimeProvider tp)
 
 // ---------------- FreeRTOSCriticalRunner ----------------
 
-#if FBSCHED_HAS_FREERTOS
+#if TASKSCHEDULER_HAS_FREERTOS
 
 FreeRTOSCriticalRunner::FreeRTOSCriticalRunner(Scheduler &sched,
                                                uint32_t stackSize,
@@ -296,7 +296,7 @@ bool FreeRTOSCriticalRunner::start()
         return true;
     }
     BaseType_t res = xTaskCreate(&FreeRTOSCriticalRunner::runnerEntry,
-                                 "fbschedCrit",
+                                 "tsCritical",
                                  _stackSize,
                                  this,
                                  _priority,
@@ -327,6 +327,6 @@ uint32_t FreeRTOSCriticalRunner::getFreeStack() const
     return static_cast<uint32_t>(uxTaskGetStackHighWaterMark(_handle));
 }
 
-#endif // FBSCHED_HAS_FREERTOS
+#endif // TASKSCHEDULER_HAS_FREERTOS
 
-} // namespace fbsched
+} // namespace taskscheduler
