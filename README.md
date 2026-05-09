@@ -31,7 +31,7 @@ lib_deps = andrenepomuceno/CriticalTaskScheduler@^1.0.0
 Clone or download into your `libraries/` folder:
 
 ```bash
-git clone https://github.com/andrenepomuceno/TaskScheduler.git TaskScheduler
+git clone https://github.com/andrenepomuceno/CriticalTaskScheduler.git CriticalTaskScheduler
 ```
 
 ## Quick Start

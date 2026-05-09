@@ -5,7 +5,7 @@
   "keywords": "task, scheduler, cooperative, freertos, esp32, arduino, periodic, timer, non-blocking, real-time",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andrenepomuceno/TaskScheduler.git"
+    "url": "https://github.com/andrenepomuceno/CriticalTaskScheduler.git"
   },
   "authors": [
     {
@@ -15,7 +15,7 @@
     }
   ],
   "license": "MIT",
-  "homepage": "https://github.com/andrenepomuceno/TaskScheduler",
+  "homepage": "https://github.com/andrenepomuceno/CriticalTaskScheduler",
   "frameworks": "arduino",
   "platforms": "*",
   "headers": "CriticalTaskScheduler.h",
