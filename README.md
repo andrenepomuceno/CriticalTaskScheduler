@@ -4,6 +4,8 @@
 [![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrenepomuceno/library/CriticalTaskScheduler.svg)](https://registry.platformio.org/libraries/andrenepomuceno/CriticalTaskScheduler)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+> **Note:** The Arduino Library Manager and PlatformIO Registry badges above will show errors until the library is approved and indexed by each registry. Installation via those registries is available once indexing completes. In the meantime, use the [manual install](#install) method.
+
 Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
 
 - **Two execution modes** — *background* (cooperative, runs the earliest-due task per `loop()` call) and *critical* (runs all due tasks; pair with the optional FreeRTOS runner on ESP32).
@@ -34,7 +36,39 @@ Clone or download into your `libraries/` folder:
 git clone https://github.com/andrenepomuceno/CriticalTaskScheduler.git CriticalTaskScheduler
 ```
 
-## Quick Start
+## Architecture
+
+```mermaid
+graph TD
+    USER["Your sketch"]
+
+    subgraph SCHED["Scheduler"]
+        BG["Background bucket\nTask* [MAX_TASKS]"]
+        CR["Critical bucket\nTask* [MAX_TASKS]"]
+    end
+
+    subgraph TASK["Task"]
+        CB["TaskCallback\nvoid (*)()" ]
+        STATS["Stats\nruns · last · avg · max · total"]
+        NRT["nextRunTime"]
+    end
+
+    subgraph ESP32["ESP32 only"]
+        FRT["FreeRTOSCriticalRunner\nvTaskDelayUntil @ tickMs"]
+    end
+
+    USER -- "addTask()" --> BG
+    USER -- "addTask() + critical=true" --> CR
+    USER -- "execute()\nin loop()" --> BG
+    FRT -- "executeCritical()\nhigh-priority thread" --> CR
+    BG -- "runs earliest-due\none per call" --> TASK
+    CR -- "runs all due\nper call" --> TASK
+    TASK --> CB
+    TASK --> STATS
+    TASK --> NRT
+```
+
+
 
 ```cpp
 #include <CriticalTaskScheduler.h>

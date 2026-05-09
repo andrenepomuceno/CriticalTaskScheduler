@@ -44,7 +44,7 @@ takes longer than `period` (see *period drift* above).
 
 ## "I want to test scheduling logic without an Arduino board"
 Use `Scheduler::setTimeProvider()` to inject a fake clock. See the
-`test/native/` directory for a Unity-based example that runs on the host.
+`test/test_native/` directory for a Unity-based example that runs on the host.
 
 ## "Library name conflicts with `arkhipenko/TaskScheduler`"
 This library is registered as **CriticalTaskScheduler** in both Arduino

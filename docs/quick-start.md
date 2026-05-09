@@ -36,6 +36,30 @@ void loop() {
 
 ## 3. Mental model
 
+```mermaid
+flowchart TD
+    A["setup()"] --> B["sched.addTask(&t)"]
+    B --> C["t.enable() / sched.enableAll()"]
+    C --> D["loop()"]
+    D --> E["sched.execute()"]
+    E --> F{Any background\ntask due?}
+    F -- Yes --> G["Run earliest-due\ntask callback"]
+    G --> H["Reschedule:\nnextRunTime = endTime + period"]
+    H --> D
+    F -- No --> D
+
+    subgraph ESP32["ESP32 only"]
+        I["runner.start()"] --> J["FreeRTOS task\n(high priority)"]
+        J --> K["vTaskDelayUntil\nevery tickMs"]
+        K --> L["sched.executeCritical()"]
+        L --> M{Any critical\ntask due?}
+        M -- Yes --> N["Run ALL due\ncritical callbacks"]
+        N --> O["Reschedule:\nnextRunTime = schedulerTime + period"]
+        O --> K
+        M -- No --> K
+    end
+```
+
 - A `Task` is a periodic callback (`void()` function pointer) plus stats.
 - A `Scheduler` owns two buckets:
   - **Background** tasks — pumped by `execute()` in `loop()`. Runs **one** earliest-due task per call. This is the cooperative core.
