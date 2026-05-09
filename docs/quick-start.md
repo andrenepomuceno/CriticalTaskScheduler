@@ -1,0 +1,50 @@
+# Quick Start
+
+A 2-minute introduction to **TaskScheduler**.
+
+## 1. Install
+
+### Arduino IDE
+*Tools → Manage Libraries…* → search **TaskScheduler** → *Install*.
+
+### PlatformIO
+```ini
+lib_deps = andrenepomuceno/TaskScheduler@^1.0.0
+```
+
+## 2. Minimal sketch
+
+```cpp
+#include <TaskScheduler.h>
+
+FBScheduler sched;
+
+void heartbeat() { Serial.println("alive"); }
+
+FBTask heartbeatTask("heartbeat", 1000, heartbeat);
+
+void setup() {
+    Serial.begin(115200);
+    sched.addTask(&heartbeatTask);
+    heartbeatTask.enable();
+}
+
+void loop() {
+    sched.execute(); // never delay()
+}
+```
+
+## 3. Mental model
+
+- A `Task` is a periodic callback (`void()` function pointer) plus stats.
+- A `Scheduler` owns two buckets:
+  - **Background** tasks — pumped by `execute()` in `loop()`. Runs **one** earliest-due task per call. This is the cooperative core.
+  - **Critical** tasks — pumped by `executeCritical()`. Runs **all** due tasks per call. Best driven from a dedicated FreeRTOS thread on ESP32 via `FBFreeRTOSCriticalRunner`.
+- Callbacks must be **non-blocking** — never call `delay()`. Use state machines if you need multi-step logic.
+
+## 4. Next steps
+
+- [Timing Semantics](timing-semantics.md) — when does a task actually fire?
+- [API Reference](api-reference.md) — every public method.
+- [Troubleshooting](troubleshooting.md) — jitter, missed runs, stack sizing.
+- [examples/](../examples) — runnable sketches for each scenario.

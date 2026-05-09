@@ -1,0 +1,52 @@
+#######################################
+# Syntax Coloring Map For TaskScheduler
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Task	KEYWORD1
+Scheduler	KEYWORD1
+TaskStats	KEYWORD1
+TaskCallback	KEYWORD1
+TimeProvider	KEYWORD1
+FreeRTOSCriticalRunner	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+addTask	KEYWORD2
+removeTask	KEYWORD2
+execute	KEYWORD2
+executeCritical	KEYWORD2
+enableAll	KEYWORD2
+disableAll	KEYWORD2
+enable	KEYWORD2
+disable	KEYWORD2
+enableDelayed	KEYWORD2
+isEnabled	KEYWORD2
+isCritical	KEYWORD2
+shouldRun	KEYWORD2
+run	KEYWORD2
+setPeriod	KEYWORD2
+getPeriod	KEYWORD2
+setCallback	KEYWORD2
+setTimeProvider	KEYWORD2
+stats	KEYWORD2
+name	KEYWORD2
+printStats	KEYWORD2
+taskCount	KEYWORD2
+criticalTaskCount	KEYWORD2
+taskAt	KEYWORD2
+criticalTaskAt	KEYWORD2
+start	KEYWORD2
+stop	KEYWORD2
+getFreeStack	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+FBSCHED_MAX_TASKS	LITERAL1

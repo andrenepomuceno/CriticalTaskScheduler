@@ -1,0 +1,38 @@
+{
+  "name": "TaskScheduler",
+  "version": "1.0.0",
+  "description": "Lightweight cooperative task scheduler with critical/background tasks for Arduino and ESP32. Portable core (no String, no std::vector, no std::function), pluggable time source, per-task stats, optional FreeRTOS runner for ESP32.",
+  "keywords": "task, scheduler, cooperative, freertos, esp32, arduino, periodic, timer, non-blocking, real-time",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrenepomuceno/TaskScheduler.git"
+  },
+  "authors": [
+    {
+      "name": "Andre Nepomuceno",
+      "url": "https://github.com/andrenepomuceno",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/andrenepomuceno/TaskScheduler",
+  "frameworks": "arduino",
+  "platforms": "*",
+  "headers": "TaskScheduler.h",
+  "examples": [
+    "examples/*/*.ino"
+  ],
+  "export": {
+    "include": [
+      "src/*",
+      "examples/*",
+      "docs/*",
+      "keywords.txt",
+      "library.properties",
+      "library.json",
+      "LICENSE",
+      "README.md",
+      "CHANGELOG.md"
+    ]
+  }
+}
