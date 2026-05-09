@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-05-09
+
+### Fixed
+- `FreeRTOSCriticalRunner` was limited to ESP32. Auto-detection now also covers
+  RP2040 (arduino-pico core, `ARDUINO_ARCH_RP2040`) and nRF52 (Adafruit core,
+  `ARDUINO_ARCH_NRF52`). Any other FreeRTOS-capable platform can opt in with
+  `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1`.
+- Corrected `test/native/` path reference in `docs/troubleshooting.md`
+  (correct path is `test/test_native/`).
+
+### Changed
+- Documentation improvements: Mermaid diagrams added to `timing-semantics.md`,
+  `quick-start.md`, and `README.md`.
+- Badges in `README.md` now include a note explaining they are pending registry
+  indexing.
+
 ## [1.0.0] - 2026-05-09
 
 ### Added
@@ -26,4 +42,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.1]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/andrenepomuceno/CriticalTaskScheduler/releases/tag/v1.0.0
