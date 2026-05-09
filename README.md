@@ -12,7 +12,7 @@ Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
 - **Portable core** — no `String`, no `std::vector`, no `std::function`; works on AVR, SAMD, RP2040, ESP8266, ESP32, etc.
 - **Per-task stats** — runs, last/avg/max execution time, total time, next-run time.
 - **Pluggable time source** — inject a fake clock for unit tests; default is `millis()`.
-- **Optional FreeRTOS critical thread** on ESP32, behind `ARDUINO_ARCH_ESP32`.
+- **Optional FreeRTOS critical thread** on ESP32, RP2040, and nRF52, behind `CRITICALTASKSCHEDULER_HAS_FREERTOS`. Any other platform with FreeRTOS can opt in with `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1`.
 
 > Battle-tested on a real ESP32-S3 robot in production.
 

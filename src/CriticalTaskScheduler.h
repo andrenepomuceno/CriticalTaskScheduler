@@ -13,12 +13,29 @@
 #define CRITICALTASKSCHEDULER_MAX_TASKS 16
 #endif
 
-#if defined(ARDUINO_ARCH_ESP32)
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-#define CRITICALTASKSCHEDULER_HAS_FREERTOS 1
-#else
-#define CRITICALTASKSCHEDULER_HAS_FREERTOS 0
+// Auto-detect FreeRTOS support on known platforms.
+// To opt in on any other platform that ships FreeRTOS headers, add:
+//   -D CRITICALTASKSCHEDULER_HAS_FREERTOS=1
+// to your build flags before including this header.
+#ifndef CRITICALTASKSCHEDULER_HAS_FREERTOS
+#  if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_NRF52)
+#    define CRITICALTASKSCHEDULER_HAS_FREERTOS 1
+#  else
+#    define CRITICALTASKSCHEDULER_HAS_FREERTOS 0
+#  endif
+#endif
+
+#if CRITICALTASKSCHEDULER_HAS_FREERTOS
+#  if defined(ARDUINO_ARCH_ESP32)
+     // ESP32 Arduino core nests FreeRTOS headers under freertos/
+#    include <freertos/FreeRTOS.h>
+#    include <freertos/task.h>
+#  else
+     // RP2040 (arduino-pico), nRF52 (Adafruit) and manually opted-in platforms
+     // expose FreeRTOS headers at the top level.
+#    include <FreeRTOS.h>
+#    include <task.h>
+#  endif
 #endif
 
 namespace taskscheduler {
@@ -152,7 +169,15 @@ private:
 
 #if CRITICALTASKSCHEDULER_HAS_FREERTOS
 // Optional helper that runs Scheduler::executeCritical() on a dedicated
-// FreeRTOS task at a fixed tick. ESP32-only.
+// FreeRTOS task at a fixed tick interval.
+//
+// Supported platforms (auto-detected):
+//   - ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3  (ARDUINO_ARCH_ESP32)
+//   - RP2040 / Raspberry Pi Pico  (ARDUINO_ARCH_RP2040, arduino-pico core)
+//   - nRF52 / Adafruit Feather nRF52  (ARDUINO_ARCH_NRF52)
+//
+// Any other platform with FreeRTOS: define CRITICALTASKSCHEDULER_HAS_FREERTOS=1
+// and ensure <FreeRTOS.h> / <task.h> are on the include path.
 class FreeRTOSCriticalRunner
 {
 public:

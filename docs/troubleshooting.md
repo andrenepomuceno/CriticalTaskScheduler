@@ -28,9 +28,13 @@ at the same instant, the fifth runs five `loop()` cycles later. Solutions:
 ## "FreeRTOSCriticalRunner won't start"
 - Stack too small — bump `stackSize` (default 4096). On ESP32, complex
   tasks (logging, JSON, MQTT) often need 8192+.
-- Out of RAM — check `ESP.getFreeHeap()`.
+- Out of RAM — check `ESP.getFreeHeap()` (ESP32) or `rp2040.getFreeHeap()` (RP2040).
 - Already running — `start()` is idempotent and returns `true` if a
   previous task handle exists.
+- Wrong platform — `FreeRTOSCriticalRunner` is auto-enabled on ESP32,
+  RP2040 (arduino-pico core), and nRF52 (Adafruit core). On other platforms,
+  add `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1` to your build flags and ensure
+  `<FreeRTOS.h>` and `<task.h>` are on your include path.
 
 ## "I get a stack overflow in a critical task"
 Watch `runner.getFreeStack()` in your supervisor task. If the high-water

@@ -63,7 +63,7 @@ flowchart TD
 - A `Task` is a periodic callback (`void()` function pointer) plus stats.
 - A `Scheduler` owns two buckets:
   - **Background** tasks — pumped by `execute()` in `loop()`. Runs **one** earliest-due task per call. This is the cooperative core.
-  - **Critical** tasks — pumped by `executeCritical()`. Runs **all** due tasks per call. Best driven from a dedicated FreeRTOS thread on ESP32 via `TSFreeRTOSCriticalRunner`.
+  - **Critical** tasks — pumped by `executeCritical()`. Runs **all** due tasks per call. Best driven from a dedicated FreeRTOS thread via `TSFreeRTOSCriticalRunner` (available on ESP32, RP2040, and nRF52; opt in on other FreeRTOS platforms with `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1`).
 - Callbacks must be **non-blocking** — never call `delay()`. Use state machines if you need multi-step logic.
 
 ## 4. Next steps
