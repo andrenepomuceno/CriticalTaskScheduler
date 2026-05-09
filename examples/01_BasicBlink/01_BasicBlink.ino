@@ -14,6 +14,10 @@
 
 #include <TaskScheduler.h>
 
+#ifndef LED_BUILTIN
+#define LED_BUILTIN 2 // Common default for many ESP32 dev boards.
+#endif
+
 TSScheduler sched;
 
 void blink()

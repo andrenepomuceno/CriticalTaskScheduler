@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  native-tests:
+    name: Native unit tests (PlatformIO)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+      - name: Run native tests
+        run: pio test -e native -v
+
+  build-examples:
+    name: Build examples (${{ matrix.env }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - env: esp32
+            example: examples/01_BasicBlink/01_BasicBlink.ino
+          - env: esp32
+            example: examples/02_CriticalVsBackground/02_CriticalVsBackground.ino
+          - env: esp32
+            example: examples/03_DelayedAndStats/03_DelayedAndStats.ino
+          - env: uno
+            example: examples/01_BasicBlink/01_BasicBlink.ino
+          - env: uno
+            example: examples/03_DelayedAndStats/03_DelayedAndStats.ino
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+      - name: Compile example
+        run: pio ci --lib="." --board=${{ matrix.env == 'esp32' && 'esp32dev' || 'uno' }} ${{ matrix.example }}
+
+  arduino-lint:
+    name: arduino-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/arduino-lint-action@v1
+        with:
+          library-manager: update
+          compliance: strict
