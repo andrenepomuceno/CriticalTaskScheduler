@@ -1,7 +1,7 @@
 # TaskScheduler
 
-[![Arduino Library Manager](https://www.ardu-badge.com/badge/TaskScheduler.svg)](https://www.ardu-badge.com/TaskScheduler)
-[![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrenepomuceno/library/TaskScheduler.svg)](https://registry.platformio.org/libraries/andrenepomuceno/TaskScheduler)
+[![Arduino Library Manager](https://www.ardu-badge.com/badge/CriticalTaskScheduler.svg)](https://www.ardu-badge.com/TaskScheduler)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrenepomuceno/library/CriticalTaskScheduler.svg)](https://registry.platformio.org/libraries/andrenepomuceno/CriticalTaskScheduler)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
@@ -18,13 +18,13 @@ Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
 
 ### Arduino IDE
 1. Open *Tools → Manage Libraries…*
-2. Search for **TaskScheduler** and click *Install*.
+2. Search for **CriticalTaskScheduler** and click *Install*.
 
 ### PlatformIO
 Add to your `platformio.ini`:
 
 ```ini
-lib_deps = andrenepomuceno/TaskScheduler@^1.0.0
+lib_deps = andrenepomuceno/CriticalTaskScheduler@^1.0.0
 ```
 
 ### Manual
@@ -37,7 +37,7 @@ git clone https://github.com/andrenepomuceno/TaskScheduler.git TaskScheduler
 ## Quick Start
 
 ```cpp
-#include <TaskScheduler.h>
+#include <CriticalTaskScheduler.h>
 
 TSScheduler sched;
 

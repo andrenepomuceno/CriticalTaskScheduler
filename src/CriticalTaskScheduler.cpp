@@ -1,6 +1,6 @@
-// TaskScheduler - Implementation.
+// CriticalTaskScheduler - Implementation.
 // SPDX-License-Identifier: MIT
-#include "TaskScheduler.h"
+#include "CriticalTaskScheduler.h"
 
 namespace taskscheduler {
 

@@ -1,5 +1,5 @@
 // Minimal Arduino.h stub for native (host) unit tests.
-// Provides only what TaskScheduler.cpp/h need.
+// Provides only what CriticalTaskScheduler.cpp/h need.
 #pragma once
 
 #include <cstddef>

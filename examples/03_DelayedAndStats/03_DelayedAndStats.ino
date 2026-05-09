@@ -1,4 +1,4 @@
-// TaskScheduler - Example 03: Delayed start + stats reporting
+// CriticalTaskScheduler - Example 03: Delayed start + stats reporting
 // Shows enableDelayed(), per-task stats, and Scheduler::printStats().
 //
 // Concepts:
@@ -6,7 +6,7 @@
 //   * TaskStats struct (runs, avg, max, last, total)
 //   * Scheduler::printStats(Print&)
 
-#include <TaskScheduler.h>
+#include <CriticalTaskScheduler.h>
 
 TSScheduler sched;
 

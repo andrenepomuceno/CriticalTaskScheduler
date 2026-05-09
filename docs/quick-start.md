@@ -1,21 +1,21 @@
 # Quick Start
 
-A 2-minute introduction to **TaskScheduler**.
+A 2-minute introduction to **CriticalTaskScheduler**.
 
 ## 1. Install
 
 ### Arduino IDE
-*Tools → Manage Libraries…* → search **TaskScheduler** → *Install*.
+*Tools → Manage Libraries…* → search **CriticalTaskScheduler** → *Install*.
 
 ### PlatformIO
 ```ini
-lib_deps = andrenepomuceno/TaskScheduler@^1.0.0
+lib_deps = andrenepomuceno/CriticalTaskScheduler@^1.0.0
 ```
 
 ## 2. Minimal sketch
 
 ```cpp
-#include <TaskScheduler.h>
+#include <CriticalTaskScheduler.h>
 
 TSScheduler sched;
 

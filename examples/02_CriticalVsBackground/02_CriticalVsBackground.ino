@@ -1,4 +1,4 @@
-// TaskScheduler - Example 02: Critical vs Background tasks (ESP32)
+// CriticalTaskScheduler - Example 02: Critical vs Background tasks (ESP32)
 // Demonstrates the two scheduling modes and the optional FreeRTOSCriticalRunner.
 //
 // Critical tasks run on a dedicated high-priority FreeRTOS task at a 10 ms tick
@@ -11,7 +11,7 @@
 //
 // Build: any ESP32 board.
 
-#include <TaskScheduler.h>
+#include <CriticalTaskScheduler.h>
 
 #if !TASKSCHEDULER_HAS_FREERTOS
 #error "This example targets ESP32 (FreeRTOS-enabled cores)."

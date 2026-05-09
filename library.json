@@ -1,5 +1,5 @@
 {
-  "name": "TaskScheduler",
+  "name": "CriticalTaskScheduler",
   "version": "1.0.0",
   "description": "Lightweight cooperative task scheduler with critical/background tasks for Arduino and ESP32. Portable core (no String, no std::vector, no std::function), pluggable time source, per-task stats, optional FreeRTOS runner for ESP32.",
   "keywords": "task, scheduler, cooperative, freertos, esp32, arduino, periodic, timer, non-blocking, real-time",
@@ -18,7 +18,7 @@
   "homepage": "https://github.com/andrenepomuceno/TaskScheduler",
   "frameworks": "arduino",
   "platforms": "*",
-  "headers": "TaskScheduler.h",
+  "headers": "CriticalTaskScheduler.h",
   "examples": [
     "examples/*/*.ino"
   ],

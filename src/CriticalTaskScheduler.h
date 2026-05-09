@@ -1,4 +1,4 @@
-// TaskScheduler - Lightweight cooperative task scheduler for Arduino/ESP32.
+// CriticalTaskScheduler - Lightweight cooperative task scheduler for Arduino/ESP32.
 // SPDX-License-Identifier: MIT
 // Repository: https://github.com/andrenepomuceno/TaskScheduler
 #pragma once

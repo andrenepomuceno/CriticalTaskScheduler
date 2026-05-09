@@ -47,6 +47,6 @@ Use `Scheduler::setTimeProvider()` to inject a fake clock. See the
 `test/native/` directory for a Unity-based example that runs on the host.
 
 ## "Library name conflicts with `arkhipenko/TaskScheduler`"
-This library is registered as **TaskScheduler** in both Arduino
+This library is registered as **CriticalTaskScheduler** in both Arduino
 Library Manager and PlatformIO Registry. Both libraries can coexist in
 your `libraries/` folder.

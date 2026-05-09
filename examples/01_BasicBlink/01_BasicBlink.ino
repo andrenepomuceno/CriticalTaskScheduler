@@ -1,4 +1,4 @@
-// TaskScheduler - Example 01: Basic blink + heartbeat
+// CriticalTaskScheduler - Example 01: Basic blink + heartbeat
 // Two cooperative background tasks running off a single Scheduler.
 //
 // Concepts:
@@ -12,7 +12,7 @@
 //   ...
 // while LED_BUILTIN toggles every 500 ms.
 
-#include <TaskScheduler.h>
+#include <CriticalTaskScheduler.h>
 
 #ifndef LED_BUILTIN
 #define LED_BUILTIN 2 // Common default for many ESP32 dev boards.

@@ -1,7 +1,7 @@
 // Unity unit tests for taskscheduler::Task and taskscheduler::Scheduler.
 // Runs on PlatformIO's native platform (host); no MCU required.
 #include <unity.h>
-#include "TaskScheduler.h"
+#include "CriticalTaskScheduler.h"
 
 using namespace taskscheduler;
 
