@@ -1,7 +1,7 @@
 # CriticalTaskScheduler
 
 [![Arduino Library Manager](https://www.ardu-badge.com/badge/CriticalTaskScheduler.svg)](https://www.ardu-badge.com/CriticalTaskScheduler)
-[![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrenepomuceno/library/CriticalTaskScheduler.svg)](https://registry.platformio.org/libraries/andrenepomuceno/CriticalTaskScheduler)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrerm2k/library/CriticalTaskScheduler.svg)](https://registry.platformio.org/libraries/andrerm2k/CriticalTaskScheduler)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
@@ -24,7 +24,7 @@ Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
 Add to your `platformio.ini`:
 
 ```ini
-lib_deps = andrenepomuceno/CriticalTaskScheduler@^1.0.0
+lib_deps = andrerm2k/CriticalTaskScheduler@^1.0.0
 ```
 
 ### Manual
