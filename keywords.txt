@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map For TaskScheduler
+# Syntax Coloring Map For CriticalTaskScheduler
 #######################################
 
 #######################################
@@ -49,4 +49,4 @@ getFreeStack	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-TASKSCHEDULER_MAX_TASKS	LITERAL1
+CRITICALTASKSCHEDULER_MAX_TASKS	LITERAL1

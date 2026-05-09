@@ -1,6 +1,6 @@
 // CriticalTaskScheduler - Lightweight cooperative task scheduler for Arduino/ESP32.
 // SPDX-License-Identifier: MIT
-// Repository: https://github.com/andrenepomuceno/TaskScheduler
+// Repository: https://github.com/andrenepomuceno/CriticalTaskScheduler
 #pragma once
 
 #include <Arduino.h>
@@ -8,17 +8,17 @@
 #include <stdint.h>
 
 // Maximum number of tasks per scheduler instance (per category: background and critical).
-// Override at compile time, e.g. -D TASKSCHEDULER_MAX_TASKS=64
-#ifndef TASKSCHEDULER_MAX_TASKS
-#define TASKSCHEDULER_MAX_TASKS 16
+// Override at compile time, e.g. -D CRITICALTASKSCHEDULER_MAX_TASKS=64
+#ifndef CRITICALTASKSCHEDULER_MAX_TASKS
+#define CRITICALTASKSCHEDULER_MAX_TASKS 16
 #endif
 
 #if defined(ARDUINO_ARCH_ESP32)
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#define TASKSCHEDULER_HAS_FREERTOS 1
+#define CRITICALTASKSCHEDULER_HAS_FREERTOS 1
 #else
-#define TASKSCHEDULER_HAS_FREERTOS 0
+#define CRITICALTASKSCHEDULER_HAS_FREERTOS 0
 #endif
 
 namespace taskscheduler {
@@ -143,14 +143,14 @@ public:
     TimeProvider timeProvider() const { return _now; }
 
 private:
-    Task *_tasks[TASKSCHEDULER_MAX_TASKS];
+    Task *_tasks[CRITICALTASKSCHEDULER_MAX_TASKS];
     size_t _count;
-    Task *_criticalTasks[TASKSCHEDULER_MAX_TASKS];
+    Task *_criticalTasks[CRITICALTASKSCHEDULER_MAX_TASKS];
     size_t _criticalCount;
     TimeProvider _now;
 };
 
-#if TASKSCHEDULER_HAS_FREERTOS
+#if CRITICALTASKSCHEDULER_HAS_FREERTOS
 // Optional helper that runs Scheduler::executeCritical() on a dedicated
 // FreeRTOS task at a fixed tick. ESP32-only.
 class FreeRTOSCriticalRunner
@@ -177,16 +177,16 @@ private:
     uint32_t _tickMs;
     TaskHandle_t _handle;
 };
-#endif // TASKSCHEDULER_HAS_FREERTOS
+#endif // CRITICALTASKSCHEDULER_HAS_FREERTOS
 
 } // namespace taskscheduler
 
 // Convenience top-level aliases for users who don't want to type the namespace.
-// Define TASKSCHEDULER_NO_GLOBAL_ALIASES to suppress.
-#ifndef TASKSCHEDULER_NO_GLOBAL_ALIASES
+// Define CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES to suppress.
+#ifndef CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES
 using TSTask = ::taskscheduler::Task;
 using TSScheduler = ::taskscheduler::Scheduler;
-#if TASKSCHEDULER_HAS_FREERTOS
+#if CRITICALTASKSCHEDULER_HAS_FREERTOS
 using TSFreeRTOSCriticalRunner = ::taskscheduler::FreeRTOSCriticalRunner;
 #endif
 #endif

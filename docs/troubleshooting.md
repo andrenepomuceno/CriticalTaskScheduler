@@ -5,8 +5,8 @@
 - Are you actually calling `sched.execute()` in `loop()` (or the critical
   pump from somewhere)?
 - Is the bucket full? `addTask()` returns `false` when more than
-  `TASKSCHEDULER_MAX_TASKS` (default 16) tasks are registered. Override with
-  `-D TASKSCHEDULER_MAX_TASKS=N`.
+  `CRITICALTASKSCHEDULER_MAX_TASKS` (default 16) tasks are registered. Override with
+  `-D CRITICALTASKSCHEDULER_MAX_TASKS=N`.
 
 ## "Background tasks fire later than expected"
 By design, `execute()` runs **one** task per call. If five tasks are due

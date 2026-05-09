@@ -2,7 +2,7 @@
 
 All public symbols live in namespace `taskscheduler`. The convenience aliases
 `TSTask`, `TSScheduler`, and `TSFreeRTOSCriticalRunner` are provided at
-global scope unless you define `TASKSCHEDULER_NO_GLOBAL_ALIASES`.
+global scope unless you define `CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES`.
 
 ## `Task`
 
@@ -50,7 +50,7 @@ struct TaskStats {
 
 | Method | Description |
 |---|---|
-| `bool addTask(Task* task)` | Register a task in the appropriate bucket. Returns `false` if the bucket is full (`TASKSCHEDULER_MAX_TASKS`, default 16). |
+| `bool addTask(Task* task)` | Register a task in the appropriate bucket. Returns `false` if the bucket is full (`CRITICALTASKSCHEDULER_MAX_TASKS`, default 16). |
 | `bool removeTask(Task* task)` | Unregister. Returns `true` if found. |
 | `void execute()` | Run **one** earliest-due background task. |
 | `void executeCritical()` | Run **every** due critical task. |
@@ -60,7 +60,7 @@ struct TaskStats {
 | `void printStats(Print& out) const` | One-line-per-task report to any `Print` (e.g. `Serial`). |
 | `void setTimeProvider(TimeProvider tp)` | Inject a custom clock. Pass `nullptr` to restore `millis()`. |
 
-## `FreeRTOSCriticalRunner` (ESP32 only, `TASKSCHEDULER_HAS_FREERTOS`)
+## `FreeRTOSCriticalRunner` (ESP32 only, `CRITICALTASKSCHEDULER_HAS_FREERTOS`)
 
 ```cpp
 FreeRTOSCriticalRunner(Scheduler& sched,
@@ -82,5 +82,5 @@ Creates a FreeRTOS task that calls `sched.executeCritical()` every `tickMs`.
 
 | Macro | Default | Effect |
 |---|---|---|
-| `TASKSCHEDULER_MAX_TASKS` | 16 | Per-bucket capacity (background and critical). Override via `-D TASKSCHEDULER_MAX_TASKS=64`. |
-| `TASKSCHEDULER_NO_GLOBAL_ALIASES` | undefined | If defined, suppresses the `TSTask`/`TSScheduler` global aliases. |
+| `CRITICALTASKSCHEDULER_MAX_TASKS` | 16 | Per-bucket capacity (background and critical). Override via `-D CRITICALTASKSCHEDULER_MAX_TASKS=64`. |
+| `CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES` | undefined | If defined, suppresses the `TSTask`/`TSScheduler` global aliases. |

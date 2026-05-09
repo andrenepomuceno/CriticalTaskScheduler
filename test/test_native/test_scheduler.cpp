@@ -230,15 +230,15 @@ static void test_scheduler_removeTask()
 static void test_scheduler_addTask_full_returns_false()
 {
     Scheduler sched;
-    Task *all[TASKSCHEDULER_MAX_TASKS];
-    for (int i = 0; i < TASKSCHEDULER_MAX_TASKS; ++i)
+    Task *all[CRITICALTASKSCHEDULER_MAX_TASKS];
+    for (int i = 0; i < CRITICALTASKSCHEDULER_MAX_TASKS; ++i)
     {
         all[i] = new Task("t", 100, taskA);
         TEST_ASSERT_TRUE(sched.addTask(all[i]));
     }
     Task overflow("of", 100, taskA);
     TEST_ASSERT_FALSE(sched.addTask(&overflow));
-    for (int i = 0; i < TASKSCHEDULER_MAX_TASKS; ++i) delete all[i];
+    for (int i = 0; i < CRITICALTASKSCHEDULER_MAX_TASKS; ++i) delete all[i];
 }
 
 // ---- Time provider injection -------------------------------------------

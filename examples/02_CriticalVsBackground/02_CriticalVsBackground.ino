@@ -13,7 +13,7 @@
 
 #include <CriticalTaskScheduler.h>
 
-#if !TASKSCHEDULER_HAS_FREERTOS
+#if !CRITICALTASKSCHEDULER_HAS_FREERTOS
 #error "This example targets ESP32 (FreeRTOS-enabled cores)."
 #endif
 
