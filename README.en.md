@@ -4,15 +4,15 @@
 [![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrenepomuceno/library/CriticalTaskScheduler.svg)](https://registry.platformio.org/libraries/andrenepomuceno/CriticalTaskScheduler)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-*Read this in other languages: [English](README.en.md) · [Português](README.pt.md) · [Español](README.es.md) · [中文](README.zh.md)*
+*Read this in other languages: [Português](README.pt.md) · [Español](README.es.md) · [中文](README.zh.md)*
 
-Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
+Lightweight cooperative task scheduler for **Arduino** and compatible boards.
 
-- **Two execution modes** — *background* (cooperative, runs the earliest-due task per `loop()` call) and *critical* (runs all due tasks; pair with the optional FreeRTOS runner on ESP32).
-- **Portable core** — no `String`, no `std::vector`, no `std::function`; works on AVR, SAMD, RP2040, ESP8266, ESP32, etc.
+- **Two execution modes** — *background* (cooperative, runs the earliest-due task per `loop()` call) and *critical* (runs all due tasks; pair with the optional FreeRTOS runner).
+- **Portable core** — no `String`, no `std::vector`, no `std::function`; works on AVR, SAMD, RP2040, ESP8266, ESP32, nRF52, and more.
 - **Per-task stats** — runs, last/avg/max execution time, total time, next-run time.
 - **Pluggable time source** — inject a fake clock for unit tests; default is `millis()`.
-- **Optional FreeRTOS critical thread** on ESP32, RP2040, and nRF52, behind `CRITICALTASKSCHEDULER_HAS_FREERTOS`. Any other platform with FreeRTOS can opt in with `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1`.
+- **Optional FreeRTOS critical thread** — auto-detected on ESP32, RP2040, and nRF52. Any other FreeRTOS platform can opt in with `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1`.
 
 > Battle-tested on a real ESP32-S3 robot in production.
 
@@ -48,19 +48,19 @@ graph TD
     end
 
     subgraph TASK["Task"]
-        CB["TaskCallback\nvoid (*)()" ]
+        CB["TaskCallback\nvoid (*)()"]
         STATS["Stats\nruns · last · avg · max · total"]
         NRT["nextRunTime"]
     end
 
-    subgraph ESP32["ESP32 only"]
-        FRT["FreeRTOSCriticalRunner\nvTaskDelayUntil @ tickMs"]
+    subgraph FRT["FreeRTOS platforms"]
+        RUNNER["FreeRTOSCriticalRunner\nvTaskDelayUntil @ tickMs"]
     end
 
     USER -- "addTask()" --> BG
     USER -- "addTask() + critical=true" --> CR
     USER -- "execute()\nin loop()" --> BG
-    FRT -- "executeCritical()\nhigh-priority thread" --> CR
+    RUNNER -- "executeCritical()\nhigh-priority thread" --> CR
     BG -- "runs earliest-due\none per call" --> TASK
     CR -- "runs all due\nper call" --> TASK
     TASK --> CB
@@ -68,7 +68,7 @@ graph TD
     TASK --> NRT
 ```
 
-
+## Quick Start
 
 ```cpp
 #include <CriticalTaskScheduler.h>
@@ -78,7 +78,7 @@ TSScheduler sched;
 void blink()  { digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); }
 void status() { Serial.println("alive"); }
 
-TSTask blinkTask("blink", 500,  blink);
+TSTask blinkTask("blink",   500,  blink);
 TSTask statusTask("status", 1000, status);
 
 void setup() {
@@ -101,7 +101,7 @@ See [examples/](examples) for more — including critical-vs-background timing, 
 
 | Feature | This library | `arkhipenko/TaskScheduler` |
 |---|---|---|
-| Critical (FreeRTOS-thread) tasks | Built-in (ESP32) | No |
+| Critical (FreeRTOS-thread) tasks | Built-in (ESP32, RP2040, nRF52) | No |
 | Earliest-due single-shot in `execute()` | Yes (anti-starvation) | No (runs all due) |
 | Per-task `runs/avg/max/total` stats | Built-in | Optional |
 | Portable AVR↔ESP32 core | Yes | Yes |
