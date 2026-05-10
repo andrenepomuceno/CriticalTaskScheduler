@@ -62,7 +62,7 @@ struct TaskStats {
 
 ## `FreeRTOSCriticalRunner` (requires FreeRTOS, `CRITICALTASKSCHEDULER_HAS_FREERTOS`)
 
-Auto-detected on **ESP32** (`ARDUINO_ARCH_ESP32`), **RP2040** (`ARDUINO_ARCH_RP2040`, arduino-pico core), and **nRF52** (`ARDUINO_ARCH_NRF52`, Adafruit core). On any other platform with FreeRTOS, set `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1` in your build flags.
+Auto-detected on **ESP32** (`ARDUINO_ARCH_ESP32`), **RP2040** (`ARDUINO_ARCH_RP2040`, arduino-pico core), **nRF52** (`ARDUINO_ARCH_NRF52`, Adafruit core), **STM32** (`ARDUINO_ARCH_STM32`, STM32duino + FreeRTOS middleware), and **Teensy 4.x** (`TEENSYDUINO`, IMXRT). On any other platform with FreeRTOS, set `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1` in your build flags.
 
 ```cpp
 FreeRTOSCriticalRunner(Scheduler& sched,
@@ -85,4 +85,4 @@ Creates a FreeRTOS task that calls `sched.executeCritical()` every `tickMs`.
 | Macro | Default | Effect |
 |---|---|---|
 | `CRITICALTASKSCHEDULER_MAX_TASKS` | 16 | Per-bucket capacity (background and critical). Override via `-D CRITICALTASKSCHEDULER_MAX_TASKS=64`. |
-| `CRITICALTASKSCHEDULER_HAS_FREERTOS` | auto-detected | Set to `1` to enable `FreeRTOSCriticalRunner`. Auto-enabled on ESP32, RP2040 (arduino-pico), and nRF52 (Adafruit). Set manually on any other FreeRTOS-capable platform. |
+| `CRITICALTASKSCHEDULER_HAS_FREERTOS` | auto-detected | Set to `1` to enable `FreeRTOSCriticalRunner`. Auto-enabled on ESP32, RP2040 (arduino-pico), nRF52 (Adafruit), STM32 (STM32duino), and Teensy 4.x. Set manually on any other FreeRTOS-capable platform. |

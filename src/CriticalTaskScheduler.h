@@ -18,7 +18,11 @@
 //   -D CRITICALTASKSCHEDULER_HAS_FREERTOS=1
 // to your build flags before including this header.
 #ifndef CRITICALTASKSCHEDULER_HAS_FREERTOS
-#  if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_NRF52)
+#  if defined(ARDUINO_ARCH_ESP32)   || \
+      defined(ARDUINO_ARCH_RP2040)  || \
+      defined(ARDUINO_ARCH_NRF52)   || \
+      defined(ARDUINO_ARCH_STM32)   || \
+      defined(TEENSYDUINO)
 #    define CRITICALTASKSCHEDULER_HAS_FREERTOS 1
 #  else
 #    define CRITICALTASKSCHEDULER_HAS_FREERTOS 0
@@ -31,8 +35,9 @@
 #    include <freertos/FreeRTOS.h>
 #    include <freertos/task.h>
 #  else
-     // RP2040 (arduino-pico), nRF52 (Adafruit) and manually opted-in platforms
-     // expose FreeRTOS headers at the top level.
+     // RP2040 (arduino-pico), nRF52 (Adafruit), STM32 (STM32duino),
+     // Teensy 4.x (IMXRT) and manually opted-in platforms expose FreeRTOS
+     // headers at the top level.
 #    include <FreeRTOS.h>
 #    include <task.h>
 #  endif
@@ -175,6 +180,8 @@ private:
 //   - ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3  (ARDUINO_ARCH_ESP32)
 //   - RP2040 / Raspberry Pi Pico  (ARDUINO_ARCH_RP2040, arduino-pico core)
 //   - nRF52 / Adafruit Feather nRF52  (ARDUINO_ARCH_NRF52)
+//   - STM32 / STM32duino + FreeRTOS middleware  (ARDUINO_ARCH_STM32)
+//   - Teensy 4.x / IMXRT  (TEENSYDUINO)
 //
 // Any other platform with FreeRTOS: define CRITICALTASKSCHEDULER_HAS_FREERTOS=1
 // and ensure <FreeRTOS.h> / <task.h> are on the include path.

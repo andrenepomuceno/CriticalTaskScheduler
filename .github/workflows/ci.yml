@@ -39,6 +39,14 @@ jobs:
             example: examples/01_BasicBlink/01_BasicBlink.ino
           - env: uno
             example: examples/03_DelayedAndStats/03_DelayedAndStats.ino
+          - env: stm32
+            example: examples/01_BasicBlink/01_BasicBlink.ino
+          - env: stm32
+            example: examples/03_DelayedAndStats/03_DelayedAndStats.ino
+          - env: teensy41
+            example: examples/01_BasicBlink/01_BasicBlink.ino
+          - env: teensy41
+            example: examples/03_DelayedAndStats/03_DelayedAndStats.ino
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -49,7 +57,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install platformio
       - name: Compile example
-        run: pio ci --lib="." --board=${{ matrix.env == 'esp32' && 'esp32dev' || 'uno' }} ${{ matrix.example }}
+        run: pio ci --lib="." --project-conf=platformio.ini --environment=${{ matrix.env }} ${{ matrix.example }}
 
   arduino-lint:
     name: arduino-lint
