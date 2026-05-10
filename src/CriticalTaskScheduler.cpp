@@ -45,7 +45,13 @@ void Task::enableDelayed(unsigned long delayMs)
 
 bool Task::shouldRun(unsigned long currentTime) const
 {
-    return _enabled && (currentTime >= _nextRunTime);
+    // Rollover-safe comparison: subtract first, then check the sign of the
+    // difference cast to a signed type. This works correctly across the
+    // ~49.7-day millis() wrap because (a - b) computed in unsigned arithmetic
+    // wraps consistently, and the result reinterpreted as signed gives the
+    // true distance as long as |a - b| < 2^31 ms (~24.8 days), which is far
+    // larger than any realistic task period.
+    return _enabled && (static_cast<long>(currentTime - _nextRunTime) >= 0);
 }
 
 void Task::run(unsigned long schedulerTime)
@@ -112,6 +118,23 @@ bool Scheduler::addTask(Task *task)
         return false;
     }
 
+    // Reject duplicates: registering the same Task twice would double-fire
+    // its callback per pump and corrupt its stats.
+    if (task->isCritical())
+    {
+        for (size_t i = 0; i < _criticalCount; ++i)
+        {
+            if (_criticalTasks[i] == task) return false;
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < _count; ++i)
+        {
+            if (_tasks[i] == task) return false;
+        }
+    }
+
     task->useTimeProvider(_now);
 
     if (task->isCritical())
@@ -163,15 +186,23 @@ void Scheduler::execute()
 {
     const unsigned long nowMs = _now();
     Task *taskToRun = nullptr;
-    unsigned long minNextRunTime = static_cast<unsigned long>(-1);
+    unsigned long maxLateness = 0;
 
+    // Among due tasks, pick the one with the largest "lateness" (now - nextRunTime).
+    // Subtraction in unsigned arithmetic + shouldRun() guard makes this rollover-safe:
+    // shouldRun() ensures the distance is non-negative when reinterpreted as signed,
+    // so the unsigned difference is the actual lateness modulo 2^32.
     for (size_t i = 0; i < _count; ++i)
     {
         Task *t = _tasks[i];
-        if (t->shouldRun(nowMs) && t->_nextRunTime < minNextRunTime)
+        if (t->shouldRun(nowMs))
         {
-            taskToRun = t;
-            minNextRunTime = t->_nextRunTime;
+            const unsigned long lateness = nowMs - t->_nextRunTime;
+            if (!taskToRun || lateness > maxLateness)
+            {
+                taskToRun = t;
+                maxLateness = lateness;
+            }
         }
     }
 
@@ -281,7 +312,11 @@ void FreeRTOSCriticalRunner::runnerEntry(void *param)
 {
     FreeRTOSCriticalRunner *self = static_cast<FreeRTOSCriticalRunner *>(param);
     TickType_t lastWakeTime = xTaskGetTickCount();
-    const TickType_t freq = pdMS_TO_TICKS(self->_tickMs);
+    TickType_t freq = pdMS_TO_TICKS(self->_tickMs);
+    // Clamp to >=1 tick. On a FreeRTOS configured with tick rate < 1 kHz,
+    // pdMS_TO_TICKS(1) can round down to 0, which makes vTaskDelayUntil
+    // behave undefined / spin.
+    if (freq == 0) freq = 1;
     for (;;)
     {
         vTaskDelayUntil(&lastWakeTime, freq);

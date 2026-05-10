@@ -260,6 +260,73 @@ static void test_setTimeProvider_propagates_to_tasks()
     TEST_ASSERT_TRUE(t.shouldRun(2050));
 }
 
+// ---- Rollover safety ---------------------------------------------------
+
+static void test_shouldRun_handles_millis_rollover()
+{
+    // Simulate a task scheduled near the end of unsigned long range.
+    Task t("t", 100, taskA);
+    t.enable();
+    g_fakeNow = 0xFFFFFFA0UL; // ~96 ms before wrap
+    t.enableDelayed(200);     // _nextRunTime = 0xFFFFFFA0 + 200 = wraps to 0x00000068
+
+    // Before due time (still 50 ms before _nextRunTime), should NOT run, even
+    // though after wrap "currentTime < _nextRunTime" naively would be tricky.
+    g_fakeNow = 0xFFFFFFA0UL + 150; // wraps: 0x00000038, 50 ms before due
+    TEST_ASSERT_FALSE(t.shouldRun(g_fakeNow));
+
+    // At/after due time, should run.
+    g_fakeNow = 0xFFFFFFA0UL + 200; // wraps: 0x00000068, exactly due
+    TEST_ASSERT_TRUE(t.shouldRun(g_fakeNow));
+
+    g_fakeNow = 0xFFFFFFA0UL + 250; // wraps: 0x000000B8, 50 ms late
+    TEST_ASSERT_TRUE(t.shouldRun(g_fakeNow));
+}
+
+static void test_scheduler_execute_picks_latest_due_across_rollover()
+{
+    // Two background tasks: t1 due BEFORE the wrap, t2 due AFTER the wrap.
+    // The scheduler must pick t1 (most overdue) rather than naively comparing
+    // raw _nextRunTime (which would prefer t2 because its value is small).
+    Scheduler sched;
+    sched.setTimeProvider(&fakeMillis);
+    Task t1("a", 100, taskA);
+    Task t2("b", 100, taskB);
+    sched.addTask(&t1);
+    sched.addTask(&t2);
+
+    g_fakeNow = 0xFFFFFF00UL;
+    t1.enable();                // _nextRunTime = 0xFFFFFF00 (most overdue eventually)
+    g_fakeNow = 0xFFFFFFFEUL;
+    t2.enable();                // _nextRunTime = 0xFFFFFFFE (less overdue)
+
+    // Advance past wrap. Now both are due, t1 is older.
+    g_fakeNow = 0x00000010UL;   // wrapped
+    sched.execute();
+    TEST_ASSERT_EQUAL_INT(1, counterA);
+    TEST_ASSERT_EQUAL_INT(0, counterB);
+}
+
+// ---- Duplicate registration --------------------------------------------
+
+static void test_addTask_rejects_duplicates()
+{
+    Scheduler sched;
+    Task t("t", 100, taskA);
+    TEST_ASSERT_TRUE(sched.addTask(&t));
+    TEST_ASSERT_FALSE(sched.addTask(&t));
+    TEST_ASSERT_EQUAL_UINT32(1, sched.taskCount());
+}
+
+static void test_addTask_rejects_duplicate_critical()
+{
+    Scheduler sched;
+    Task c("c", 100, taskCritical, true);
+    TEST_ASSERT_TRUE(sched.addTask(&c));
+    TEST_ASSERT_FALSE(sched.addTask(&c));
+    TEST_ASSERT_EQUAL_UINT32(1, sched.criticalTaskCount());
+}
+
 // ---- main --------------------------------------------------------------
 
 int main(int, char **)
@@ -288,6 +355,11 @@ int main(int, char **)
     RUN_TEST(test_scheduler_addTask_full_returns_false);
 
     RUN_TEST(test_setTimeProvider_propagates_to_tasks);
+
+    RUN_TEST(test_shouldRun_handles_millis_rollover);
+    RUN_TEST(test_scheduler_execute_picks_latest_due_across_rollover);
+    RUN_TEST(test_addTask_rejects_duplicates);
+    RUN_TEST(test_addTask_rejects_duplicate_critical);
 
     return UNITY_END();
 }

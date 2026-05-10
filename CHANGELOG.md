@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-05-09
+
+### Fixed
+- **`millis()` rollover bug.** `Task::shouldRun()` and the earliest-due
+  selection in `Scheduler::execute()` used a naive `>=` comparison on
+  `unsigned long`, which broke around the ~49.7-day `millis()` wrap (tasks
+  could fire instantly or stop firing for ~49 days). Both now use
+  rollover-safe arithmetic (`(long)(now - nextRunTime) >= 0` and
+  lateness-based selection).
+- **Duplicate task registration.** `Scheduler::addTask()` now rejects a
+  `Task*` already registered in the same bucket (returns `false`).
+  Previously a duplicate would double-fire its callback per pump and corrupt
+  its stats.
+- **`FreeRTOSCriticalRunner` tick-rate edge case.** `pdMS_TO_TICKS(tickMs)`
+  is now clamped to `>= 1`, preventing undefined behaviour from
+  `vTaskDelayUntil` on FreeRTOS configurations where the tick rate would
+  round the requested period down to zero.
+
+### Changed
+- Documented thread-safety contract on `FreeRTOSCriticalRunner`: configure
+  all critical tasks before `start()`; do not mutate the critical bucket
+  while the runner is running.
+
+### Added
+- Unit tests covering `millis()` rollover (`shouldRun` + `execute`) and
+  duplicate-rejection in `addTask` (4 new tests, all passing on native).
+
 ## [1.0.2] - 2026-05-09
 
 ### Fixed
@@ -55,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.3]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/andrenepomuceno/CriticalTaskScheduler/releases/tag/v1.0.0

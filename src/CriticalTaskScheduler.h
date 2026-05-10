@@ -190,6 +190,17 @@ private:
 //
 // Any other platform with FreeRTOS: define CRITICALTASKSCHEDULER_HAS_FREERTOS=1
 // and ensure <FreeRTOS.h> / <task.h> are on the include path.
+//
+// THREAD-SAFETY WARNING:
+//   The runner invokes Scheduler::executeCritical() from a dedicated FreeRTOS
+//   thread while loop() is still running. The Scheduler does NOT hold internal
+//   locks. To avoid races on the critical task array and per-task stats:
+//     1. Register and configure all critical tasks BEFORE calling start().
+//     2. Do NOT call addTask/removeTask/enableAll/disableAll for critical
+//        tasks once the runner is running. Either stop() the runner first,
+//        or restrict mutations to background tasks.
+//     3. Reading stats (printStats) is best-effort; values may appear
+//        slightly inconsistent on 8-bit MCUs (non-atomic 32-bit reads).
 class FreeRTOSCriticalRunner
 {
 public:
