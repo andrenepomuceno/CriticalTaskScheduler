@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-05-09
+
+### Fixed
+- Removed STM32 (`ARDUINO_ARCH_STM32`) and Teensy 4.x (`TEENSYDUINO`) from
+  the FreeRTOS auto-detection guard. Those cores do **not** bundle FreeRTOS,
+  causing a fatal `FreeRTOS.h: No such file or directory` compile error for
+  any user without an optional FreeRTOS library installed.
+  Both platforms remain supported via manual opt-in:
+  `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1` + add the FreeRTOS library to
+  `lib_deps` (e.g. `stm32duino/STM32FreeRTOS` for STM32).
+- Updated `FreeRTOSCriticalRunner` class comment and all documentation to
+  correctly reflect auto-detected vs. opt-in platforms.
+
 ## [1.0.1] - 2026-05-09
 
 ### Fixed
@@ -42,5 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.2]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/andrenepomuceno/CriticalTaskScheduler/releases/tag/v1.0.0

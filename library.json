@@ -1,6 +1,6 @@
 {
   "name": "CriticalTaskScheduler",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lightweight cooperative task scheduler with critical/background tasks for Arduino. Portable core (no String, no std::vector, no std::function), pluggable time source, per-task stats, optional FreeRTOS runner (auto-detected on ESP32, RP2040, nRF52; opt-in on STM32, Teensy, and others).",
   "keywords": "task, scheduler, cooperative, freertos, esp32, rp2040, nrf52, stm32, teensy, arduino, periodic, timer, non-blocking, real-time",
   "repository": {
