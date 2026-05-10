@@ -105,14 +105,14 @@ graph LR
 
 | You need… | Use |
 |---|---|
-| 50–500 ms control loop, sensor sampling, motor PID | **Critical** (with `FreeRTOSCriticalRunner` on ESP32, RP2040, nRF52, STM32, Teensy 4.x) |
+| 50–500 ms control loop, sensor sampling, motor PID | **Critical** (with `FreeRTOSCriticalRunner` on ESP32, RP2040, nRF52; manual opt-in on STM32, Teensy 4.x) |
 | MQTT publish, telemetry, log flush, supervisory checks | **Background** |
 | Strict cadence even under varying callback duration | **Critical** |
 | Maximum simplicity, single-thread Arduino sketch | **Background** only |
 
 ## Jitter expectations
 
-- **Critical (ESP32 / RP2040 / nRF52 / STM32 / Teensy 4.x with FreeRTOSCriticalRunner @ 10 ms tick):** worst-case
+- **Critical (ESP32 / RP2040 / nRF52 with FreeRTOSCriticalRunner @ 10 ms tick):** worst-case
   jitter ≈ tick + sum of higher-priority work. Typically < 1 ms on idle
   cores.
 - **Background:** jitter ≈ longest other background callback +

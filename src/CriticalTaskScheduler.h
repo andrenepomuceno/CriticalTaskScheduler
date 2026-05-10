@@ -13,16 +13,18 @@
 #define CRITICALTASKSCHEDULER_MAX_TASKS 16
 #endif
 
-// Auto-detect FreeRTOS support on known platforms.
+// Auto-detect FreeRTOS support on platforms where it is bundled in the core.
 // To opt in on any other platform that ships FreeRTOS headers, add:
 //   -D CRITICALTASKSCHEDULER_HAS_FREERTOS=1
 // to your build flags before including this header.
+//
+// NOTE: STM32 (STM32duino) and Teensy 4.x are NOT auto-detected because their
+// Arduino cores do NOT bundle FreeRTOS. Users who have explicitly added a
+// FreeRTOS library (e.g. stm32duino/STM32FreeRTOS) must opt in manually.
 #ifndef CRITICALTASKSCHEDULER_HAS_FREERTOS
-#  if defined(ARDUINO_ARCH_ESP32)   || \
-      defined(ARDUINO_ARCH_RP2040)  || \
-      defined(ARDUINO_ARCH_NRF52)   || \
-      defined(ARDUINO_ARCH_STM32)   || \
-      defined(TEENSYDUINO)
+#  if defined(ARDUINO_ARCH_ESP32)  || \
+      defined(ARDUINO_ARCH_RP2040) || \
+      defined(ARDUINO_ARCH_NRF52)
 #    define CRITICALTASKSCHEDULER_HAS_FREERTOS 1
 #  else
 #    define CRITICALTASKSCHEDULER_HAS_FREERTOS 0
@@ -35,9 +37,8 @@
 #    include <freertos/FreeRTOS.h>
 #    include <freertos/task.h>
 #  else
-     // RP2040 (arduino-pico), nRF52 (Adafruit), STM32 (STM32duino),
-     // Teensy 4.x (IMXRT) and manually opted-in platforms expose FreeRTOS
-     // headers at the top level.
+     // RP2040 (arduino-pico), nRF52 (Adafruit) and manually opted-in platforms
+     // expose FreeRTOS headers at the top level.
 #    include <FreeRTOS.h>
 #    include <task.h>
 #  endif
@@ -176,12 +177,16 @@ private:
 // Optional helper that runs Scheduler::executeCritical() on a dedicated
 // FreeRTOS task at a fixed tick interval.
 //
-// Supported platforms (auto-detected):
+// Supported platforms (auto-detected — FreeRTOS bundled in core):
 //   - ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3  (ARDUINO_ARCH_ESP32)
 //   - RP2040 / Raspberry Pi Pico  (ARDUINO_ARCH_RP2040, arduino-pico core)
 //   - nRF52 / Adafruit Feather nRF52  (ARDUINO_ARCH_NRF52)
-//   - STM32 / STM32duino + FreeRTOS middleware  (ARDUINO_ARCH_STM32)
-//   - Teensy 4.x / IMXRT  (TEENSYDUINO)
+//
+// Platforms requiring manual opt-in (FreeRTOS not bundled in core):
+//   - STM32 / STM32duino: add stm32duino/STM32FreeRTOS to lib_deps, then
+//     set -D CRITICALTASKSCHEDULER_HAS_FREERTOS=1 in build_flags.
+//   - Teensy 4.x: add a FreeRTOS port to lib_deps, then set
+//     -D CRITICALTASKSCHEDULER_HAS_FREERTOS=1 in build_flags.
 //
 // Any other platform with FreeRTOS: define CRITICALTASKSCHEDULER_HAS_FREERTOS=1
 // and ensure <FreeRTOS.h> / <task.h> are on the include path.

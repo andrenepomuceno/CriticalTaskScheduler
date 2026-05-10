@@ -32,10 +32,11 @@ at the same instant, the fifth runs five `loop()` cycles later. Solutions:
 - Already running — `start()` is idempotent and returns `true` if a
   previous task handle exists.
 - Wrong platform — `FreeRTOSCriticalRunner` is auto-enabled on ESP32,
-  RP2040 (arduino-pico core), nRF52 (Adafruit core), STM32 (STM32duino +
-  FreeRTOS middleware), and Teensy 4.x. On other platforms, add
-  `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1` to your build flags and ensure
-  `<FreeRTOS.h>` and `<task.h>` are on your include path.
+  RP2040 (arduino-pico core), and nRF52 (Adafruit core) because FreeRTOS is
+  bundled in those cores. **STM32** and **Teensy 4.x** require manual opt-in:
+  add the FreeRTOS library to `lib_deps` (e.g. `stm32duino/STM32FreeRTOS`
+  for STM32) and set `-D CRITICALTASKSCHEDULER_HAS_FREERTOS=1` in `build_flags`.
+  Any other FreeRTOS platform works the same way.
 
 ## "I get a stack overflow in a critical task"
 Watch `runner.getFreeStack()` in your supervisor task. If the high-water
