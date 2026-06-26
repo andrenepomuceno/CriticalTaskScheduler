@@ -24,7 +24,7 @@ Construct a task. `name` must point to a string with static lifetime
 | `void setPeriod(unsigned long ms)` | Update period. Takes effect on the next reschedule. |
 | `unsigned long getPeriod() const` | Current period. |
 | `void setCallback(TaskCallback cb)` | Replace the callback at runtime. |
-| `bool shouldRun(unsigned long now) const` | `enabled && now >= nextRunTime`. |
+| `bool shouldRun(unsigned long now) const` | True when `enabled` and the task is due. Uses rollover-safe arithmetic (`(long)(now - nextRunTime) >= 0`), so it stays correct across the ~49.7-day `millis()` wrap. |
 | `void run(unsigned long schedulerTime)` | Invoke callback, update stats and `nextRunTime`. Normally called by `Scheduler`. |
 | `TaskStats stats() const` | Snapshot of all counters. |
 | `const char* name() const` | Task name as passed to the constructor. |
@@ -46,6 +46,13 @@ struct TaskStats {
 };
 ```
 
+> **Resolution.** Execution times are measured with the active time source,
+> which defaults to `millis()` — i.e. **1 ms granularity**. A callback that
+> takes less than 1 ms reports `lastExecutionTime`/`maxExecutionTime` of `0`
+> and an `avgExecutionTime` near `0`. For sub-millisecond profiling, inject a
+> `micros()`-based `TimeProvider` via `Scheduler::setTimeProvider()` (note that
+> this also changes the unit of every period and timing field to microseconds).
+
 ## `Scheduler`
 
 | Method | Description |
@@ -59,6 +66,7 @@ struct TaskStats {
 | `Task* taskAt(size_t)` / `criticalTaskAt(size_t)` | Random access for inspection. |
 | `void printStats(Print& out) const` | One-line-per-task report to any `Print` (e.g. `Serial`). |
 | `void setTimeProvider(TimeProvider tp)` | Inject a custom clock. Pass `nullptr` to restore `millis()`. |
+| `TimeProvider timeProvider() const` | The time source currently installed (`nullptr` means the default `millis()`). |
 
 ## `FreeRTOSCriticalRunner` (requires FreeRTOS, `CRITICALTASKSCHEDULER_HAS_FREERTOS`)
 
@@ -75,6 +83,13 @@ FreeRTOSCriticalRunner(Scheduler& sched,
 
 Creates a FreeRTOS task that calls `sched.executeCritical()` every `tickMs`.
 
+- `stackSize` — task stack in bytes (default 4096). Bump it for heavy callbacks
+  (logging, JSON, MQTT often need 8192+).
+- `priority` — FreeRTOS task priority (default `configMAX_PRIORITIES - 1`, the
+  highest). Lower it if the runner must yield to an even-higher-priority task.
+- `tickMs` — how often the critical pump runs. Keep it `<=` the smallest
+  critical-task period, and `>= 1` tick of the FreeRTOS scheduler.
+
 | Method | Description |
 |---|---|
 | `bool start()` | Spawn the FreeRTOS task. Idempotent. |
@@ -88,3 +103,4 @@ Creates a FreeRTOS task that calls `sched.executeCritical()` every `tickMs`.
 |---|---|---|
 | `CRITICALTASKSCHEDULER_MAX_TASKS` | 16 | Per-bucket capacity (background and critical). Override via `-D CRITICALTASKSCHEDULER_MAX_TASKS=64`. |
 | `CRITICALTASKSCHEDULER_HAS_FREERTOS` | auto-detected | Set to `1` to enable `FreeRTOSCriticalRunner`. Auto-enabled on ESP32, RP2040 (arduino-pico), and nRF52 (Adafruit) — FreeRTOS is bundled in their cores. STM32 and Teensy 4.x need a FreeRTOS library added to `lib_deps` plus this flag set manually. |
+| `CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES` | unset | Define it to suppress the global `TSTask` / `TSScheduler` / `TSFreeRTOSCriticalRunner` aliases (e.g. to avoid a name clash). The `taskscheduler::` symbols are always available. |

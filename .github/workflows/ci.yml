@@ -39,6 +39,10 @@ jobs:
             example: examples/01_BasicBlink/01_BasicBlink.ino
           - env: uno
             example: examples/03_DelayedAndStats/03_DelayedAndStats.ino
+          - env: uno
+            example: examples/04_RuntimeControl/04_RuntimeControl.ino
+          - env: esp32
+            example: examples/04_RuntimeControl/04_RuntimeControl.ino
           - env: stm32
             example: examples/01_BasicBlink/01_BasicBlink.ino
           - env: stm32

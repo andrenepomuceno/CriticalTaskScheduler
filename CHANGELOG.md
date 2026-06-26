@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2026-06-26
+
+### Added
+- **Example `04_RuntimeControl`.** Portable sketch (compiles on AVR/UNO) that
+  drives critical tasks **without FreeRTOS** by calling `executeCritical()`
+  from `loop()`, and reconfigures tasks at runtime via `setPeriod()`,
+  `setCallback()` (capture-less lambda), `disable()`, and `removeTask()`.
+
+### Changed
+- **Docs accuracy.** `shouldRun()` is now documented (API reference + header)
+  as rollover-safe `(long)(now - nextRunTime) >= 0` rather than the naive
+  `now >= nextRunTime`. Added the `Scheduler::timeProvider()` getter, the
+  `FreeRTOSCriticalRunner` constructor parameters, and the
+  `CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES` macro to the reference.
+- Documented that stats use the active clock's resolution (1 ms with the
+  default `millis()`), so sub-millisecond callbacks report ~0.
+- `keywords.txt`: added the `TS*` global aliases, `isRunning`, `timeProvider`,
+  and the `HAS_FREERTOS` / `NO_GLOBAL_ALIASES` macros for IDE highlighting.
+- Example `02` comments no longer say "ESP32 only" — it builds on any
+  FreeRTOS core (ESP32, RP2040, nRF52). Example `03` now notes that its
+  delays only simulate work and that sub-ms timings round to 0.
+
 ## [1.0.6] - 2026-06-26
 
 ### Fixed
@@ -128,6 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.7]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.3...v1.0.4

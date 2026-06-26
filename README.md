@@ -95,7 +95,7 @@ void loop() {
 }
 ```
 
-See [examples/](https://github.com/andrenepomuceno/CriticalTaskScheduler/tree/main/examples) for more — including critical-vs-background timing, delayed start, and stats.
+See [examples/](https://github.com/andrenepomuceno/CriticalTaskScheduler/tree/main/examples) for more — including critical-vs-background timing, delayed start, stats, and runtime control (incl. critical tasks without FreeRTOS).
 
 ## Why another scheduler?
 

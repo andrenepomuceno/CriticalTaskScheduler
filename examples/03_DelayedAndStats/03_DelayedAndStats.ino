@@ -5,12 +5,20 @@
 //   * enableDelayed() to stagger task start times
 //   * TaskStats struct (runs, avg, max, last, total)
 //   * Scheduler::printStats(Print&)
+//
+// NOTE 1 — the delays below only SIMULATE callback work so the stats have
+//   something to report. Real callbacks must be non-blocking; never call
+//   delay() in production task callbacks.
+// NOTE 2 — execution times use the default millis() clock, so they have 1 ms
+//   resolution. The sub-millisecond fast() task therefore reports avg/max ~0;
+//   that is expected, not a bug. Inject a micros()-based TimeProvider via
+//   sched.setTimeProvider() if you need finer profiling.
 
 #include <CriticalTaskScheduler.h>
 
 TSScheduler sched;
 
-void fast()  { delayMicroseconds(500); }   // ~0.5 ms work
+void fast()  { delayMicroseconds(500); }   // ~0.5 ms work -> reads 0 ms (see NOTE 2)
 void slow()  { delay(3); }                 // ~3 ms work
 void mid()   { delayMicroseconds(1500); }  // ~1.5 ms work
 

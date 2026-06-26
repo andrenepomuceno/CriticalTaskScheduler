@@ -1,4 +1,4 @@
-// CriticalTaskScheduler - Example 02: Critical vs Background tasks (ESP32)
+// CriticalTaskScheduler - Example 02: Critical vs Background tasks (FreeRTOS)
 // Demonstrates the two scheduling modes and the optional FreeRTOSCriticalRunner.
 //
 // Critical tasks run on a dedicated high-priority FreeRTOS task at a 10 ms tick
@@ -6,10 +6,11 @@
 //
 // Concepts:
 //   * Critical-flag in Task constructor
-//   * FreeRTOSCriticalRunner (ESP32 only)
+//   * FreeRTOSCriticalRunner (FreeRTOS platforms: ESP32, RP2040, nRF52)
 //   * Reschedule semantics: critical = nominal cadence, background = absorbs jitter
 //
-// Build: any ESP32 board.
+// Build: any FreeRTOS-enabled core (ESP32, RP2040/arduino-pico, nRF52/Adafruit).
+// For critical tasks WITHOUT FreeRTOS (e.g. AVR/UNO), see example 04.
 
 #include <CriticalTaskScheduler.h>
 

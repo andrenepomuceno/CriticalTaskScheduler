@@ -95,7 +95,9 @@ public:
 
     void setCallback(TaskCallback cb) { _callback = cb; }
 
-    // True when enabled and now >= nextRunTime.
+    // True when enabled and the task is due. Uses rollover-safe arithmetic
+    // ((long)(now - nextRunTime) >= 0), so it stays correct across the
+    // ~49.7-day millis() wrap.
     bool shouldRun(unsigned long now) const;
 
     // Invoke the callback and update stats / next-run time.

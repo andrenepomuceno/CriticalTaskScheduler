@@ -12,6 +12,9 @@ TaskStats	KEYWORD1
 TaskCallback	KEYWORD1
 TimeProvider	KEYWORD1
 FreeRTOSCriticalRunner	KEYWORD1
+TSTask	KEYWORD1
+TSScheduler	KEYWORD1
+TSFreeRTOSCriticalRunner	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -34,6 +37,7 @@ setPeriod	KEYWORD2
 getPeriod	KEYWORD2
 setCallback	KEYWORD2
 setTimeProvider	KEYWORD2
+timeProvider	KEYWORD2
 stats	KEYWORD2
 name	KEYWORD2
 printStats	KEYWORD2
@@ -43,6 +47,7 @@ taskAt	KEYWORD2
 criticalTaskAt	KEYWORD2
 start	KEYWORD2
 stop	KEYWORD2
+isRunning	KEYWORD2
 getFreeStack	KEYWORD2
 
 #######################################
@@ -50,3 +55,5 @@ getFreeStack	KEYWORD2
 #######################################
 
 CRITICALTASKSCHEDULER_MAX_TASKS	LITERAL1
+CRITICALTASKSCHEDULER_HAS_FREERTOS	LITERAL1
+CRITICALTASKSCHEDULER_NO_GLOBAL_ALIASES	LITERAL1
