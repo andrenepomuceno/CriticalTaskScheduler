@@ -2,9 +2,9 @@
 
 [![Arduino Library Manager](https://www.ardu-badge.com/badge/CriticalTaskScheduler.svg)](https://www.ardu-badge.com/CriticalTaskScheduler)
 [![PlatformIO Registry](https://badges.registry.platformio.org/packages/andrenepomuceno/library/CriticalTaskScheduler.svg)](https://registry.platformio.org/libraries/andrenepomuceno/CriticalTaskScheduler)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/LICENSE)
 
-*Read this in other languages: [English](README.en.md) · [Português](README.pt.md) · [Español](README.es.md) · [中文](README.zh.md)*
+*Read this in other languages: [English](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/README.en.md) · [Português](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/README.pt.md) · [Español](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/README.es.md) · [中文](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/README.zh.md)*
 
 Lightweight cooperative task scheduler for **Arduino** and **ESP32**.
 
@@ -95,7 +95,7 @@ void loop() {
 }
 ```
 
-See [examples/](examples) for more — including critical-vs-background timing, delayed start, and stats.
+See [examples/](https://github.com/andrenepomuceno/CriticalTaskScheduler/tree/main/examples) for more — including critical-vs-background timing, delayed start, and stats.
 
 ## Why another scheduler?
 
@@ -109,11 +109,11 @@ See [examples/](examples) for more — including critical-vs-background timing, 
 
 ## Documentation
 
-- [Quick Start](docs/quick-start.md)
-- [API Reference](docs/api-reference.md)
-- [Timing Semantics](docs/timing-semantics.md) — critical vs background, reschedule rules, jitter
-- [Troubleshooting](docs/troubleshooting.md)
+- [Quick Start](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/docs/quick-start.md)
+- [API Reference](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/docs/api-reference.md)
+- [Timing Semantics](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/docs/timing-semantics.md) — critical vs background, reschedule rules, jitter
+- [Troubleshooting](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/docs/troubleshooting.md)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](https://github.com/andrenepomuceno/CriticalTaskScheduler/blob/main/LICENSE).

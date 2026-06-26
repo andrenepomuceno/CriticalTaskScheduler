@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-06-26
+
+### Changed
+- **Discoverability.** Reworded `library.properties` `sentence` and
+  `library.json` `description` to lead with the exact phrase "Task scheduler"
+  so the library ranks for generic `task scheduler` searches in the Arduino
+  Library Manager and PlatformIO Registry (not only the exact library name).
+
+### Fixed
+- **Broken links in the registry article.** All relative links in `README.md`
+  (other-language READMEs, `docs/`, `examples/`, `LICENSE`) are now absolute
+  GitHub URLs. The PlatformIO and Arduino registries render `README.md`
+  standalone and do not resolve relative paths, so those links were broken on
+  the published pages.
+
 ## [1.0.3] - 2026-05-09
 
 ### Fixed
@@ -82,6 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.4]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.0...v1.0.1
