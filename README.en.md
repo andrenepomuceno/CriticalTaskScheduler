@@ -43,26 +43,26 @@ graph TD
     USER["Your sketch"]
 
     subgraph SCHED["Scheduler"]
-        BG["Background bucket\nTask* [MAX_TASKS]"]
-        CR["Critical bucket\nTask* [MAX_TASKS]"]
+        BG["Background bucket<br>Task* [MAX_TASKS]"]
+        CR["Critical bucket<br>Task* [MAX_TASKS]"]
     end
 
     subgraph TASK["Task"]
-        CB["TaskCallback\nvoid (*)()"]
-        STATS["Stats\nruns · last · avg · max · total"]
+        CB["TaskCallback<br>void (*)()"]
+        STATS["Stats<br>runs · last · avg · max · total"]
         NRT["nextRunTime"]
     end
 
     subgraph FRT["FreeRTOS platforms"]
-        RUNNER["FreeRTOSCriticalRunner\nvTaskDelayUntil @ tickMs"]
+        RUNNER["FreeRTOSCriticalRunner<br>vTaskDelayUntil @ tickMs"]
     end
 
     USER -- "addTask()" --> BG
     USER -- "addTask() + critical=true" --> CR
-    USER -- "execute()\nin loop()" --> BG
-    RUNNER -- "executeCritical()\nhigh-priority thread" --> CR
-    BG -- "runs earliest-due\none per call" --> TASK
-    CR -- "runs all due\nper call" --> TASK
+    USER -- "execute()<br>in loop()" --> BG
+    RUNNER -- "executeCritical()<br>high-priority thread" --> CR
+    BG -- "runs earliest-due<br>one per call" --> TASK
+    CR -- "runs all due<br>per call" --> TASK
     TASK --> CB
     TASK --> STATS
     TASK --> NRT

@@ -43,26 +43,26 @@ graph TD
     USER["您的 sketch"]
 
     subgraph SCHED["Scheduler"]
-        BG["后台任务桶\nTask* [MAX_TASKS]"]
-        CR["关键任务桶\nTask* [MAX_TASKS]"]
+        BG["后台任务桶<br>Task* [MAX_TASKS]"]
+        CR["关键任务桶<br>Task* [MAX_TASKS]"]
     end
 
     subgraph TASK["Task"]
-        CB["TaskCallback\nvoid (*)()"]
-        STATS["统计\n次数 · 最近 · 平均 · 最大 · 总计"]
+        CB["TaskCallback<br>void (*)()"]
+        STATS["统计<br>次数 · 最近 · 平均 · 最大 · 总计"]
         NRT["nextRunTime"]
     end
 
     subgraph FRT["FreeRTOS 平台"]
-        RUNNER["FreeRTOSCriticalRunner\nvTaskDelayUntil @ tickMs"]
+        RUNNER["FreeRTOSCriticalRunner<br>vTaskDelayUntil @ tickMs"]
     end
 
     USER -- "addTask()" --> BG
     USER -- "addTask() + critical=true" --> CR
-    USER -- "execute()\n在 loop() 中" --> BG
-    RUNNER -- "executeCritical()\n高优先级线程" --> CR
-    BG -- "执行最早到期任务\n每次调用一个" --> TASK
-    CR -- "执行所有到期任务\n每次调用" --> TASK
+    USER -- "execute()<br>在 loop() 中" --> BG
+    RUNNER -- "executeCritical()<br>高优先级线程" --> CR
+    BG -- "执行最早到期任务<br>每次调用一个" --> TASK
+    CR -- "执行所有到期任务<br>每次调用" --> TASK
     TASK --> CB
     TASK --> STATS
     TASK --> NRT

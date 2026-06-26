@@ -43,26 +43,26 @@ graph TD
     USER["Su sketch"]
 
     subgraph SCHED["Scheduler"]
-        BG["Bucket background\nTask* [MAX_TASKS]"]
-        CR["Bucket critical\nTask* [MAX_TASKS]"]
+        BG["Bucket background<br>Task* [MAX_TASKS]"]
+        CR["Bucket critical<br>Task* [MAX_TASKS]"]
     end
 
     subgraph TASK["Task"]
-        CB["TaskCallback\nvoid (*)()"]
-        STATS["Estadísticas\nejecs · último · prom · máx · total"]
+        CB["TaskCallback<br>void (*)()"]
+        STATS["Estadísticas<br>ejecs · último · prom · máx · total"]
         NRT["nextRunTime"]
     end
 
     subgraph FRT["Plataformas FreeRTOS"]
-        RUNNER["FreeRTOSCriticalRunner\nvTaskDelayUntil @ tickMs"]
+        RUNNER["FreeRTOSCriticalRunner<br>vTaskDelayUntil @ tickMs"]
     end
 
     USER -- "addTask()" --> BG
     USER -- "addTask() + critical=true" --> CR
-    USER -- "execute()\nen loop()" --> BG
-    RUNNER -- "executeCritical()\nhilo de alta prioridad" --> CR
-    BG -- "ejecuta la más retrasada\nuna por llamada" --> TASK
-    CR -- "ejecuta todas las pendientes\npor llamada" --> TASK
+    USER -- "execute()<br>en loop()" --> BG
+    RUNNER -- "executeCritical()<br>hilo de alta prioridad" --> CR
+    BG -- "ejecuta la más retrasada<br>una por llamada" --> TASK
+    CR -- "ejecuta todas las pendientes<br>por llamada" --> TASK
     TASK --> CB
     TASK --> STATS
     TASK --> NRT

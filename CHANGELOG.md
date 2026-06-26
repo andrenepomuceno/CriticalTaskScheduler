@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-06-26
+
+### Fixed
+- **Broken Mermaid diagrams.** Node/edge labels used `\n` for line breaks,
+  which Mermaid renders as the literal text `\n` instead of a line break
+  (it requires `<br>`). Fixed across `README.md`, all translated READMEs
+  (en/pt/es/zh), `docs/quick-start.md`, and `docs/timing-semantics.md`.
+
+### Changed
+- `README.md` architecture diagram: the optional-runner subgraph is now
+  labelled "FreeRTOS platforms" (was "ESP32 only"), matching the translated
+  READMEs and the actual auto-detection (ESP32, RP2040, nRF52).
+
 ## [1.0.5] - 2026-06-26
 
 ### Fixed
@@ -115,6 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.6]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.2...v1.0.3

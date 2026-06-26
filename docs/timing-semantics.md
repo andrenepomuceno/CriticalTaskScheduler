@@ -91,13 +91,13 @@ overshoots, the next deadline is still measured against ideal time.
 ```mermaid
 graph LR
     subgraph BG["Background (execute())"]
-        B1["callback ends\nat endTime"] --> B2["nextRunTime =\nendTime + period"]
-        B2 --> B3["Jitter absorbed\ninto spacing"]
+        B1["callback ends<br>at endTime"] --> B2["nextRunTime =<br>endTime + period"]
+        B2 --> B3["Jitter absorbed<br>into spacing"]
     end
 
     subgraph CR["Critical (executeCritical())"]
-        C1["scheduler reads\nnow = schedulerTime"] --> C2["nextRunTime =\nschedulerTime + period"]
-        C2 --> C3["Nominal cadence\npreserved"]
+        C1["scheduler reads<br>now = schedulerTime"] --> C2["nextRunTime =<br>schedulerTime + period"]
+        C2 --> C3["Nominal cadence<br>preserved"]
     end
 ```
 
