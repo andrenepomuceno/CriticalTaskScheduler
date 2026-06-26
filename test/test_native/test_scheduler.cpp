@@ -264,22 +264,28 @@ static void test_setTimeProvider_propagates_to_tasks()
 
 static void test_shouldRun_handles_millis_rollover()
 {
-    // Simulate a task scheduled near the end of unsigned long range.
+    // Simulate a task scheduled near the end of the unsigned long range. Anchor
+    // to (unsigned long)-1 instead of a hardcoded 0xFFFFFFFF so the wrap happens
+    // at the real width of `unsigned long` on this host (32-bit on AVR/ARM, but
+    // 64-bit on a typical native CI runner). millis() is `unsigned long`, so the
+    // rollover-safe arithmetic must hold at whatever that width is.
+    const unsigned long maxMillis = static_cast<unsigned long>(-1); // 0xFF..FF
+    const unsigned long base = maxMillis - 0x5F;                    // ~96 ms before wrap
     Task t("t", 100, taskA);
     t.enable();
-    g_fakeNow = 0xFFFFFFA0UL; // ~96 ms before wrap
-    t.enableDelayed(200);     // _nextRunTime = 0xFFFFFFA0 + 200 = wraps to 0x00000068
+    g_fakeNow = base;
+    t.enableDelayed(200);     // _nextRunTime = base + 200, wraps past maxMillis
 
     // Before due time (still 50 ms before _nextRunTime), should NOT run, even
     // though after wrap "currentTime < _nextRunTime" naively would be tricky.
-    g_fakeNow = 0xFFFFFFA0UL + 150; // wraps: 0x00000038, 50 ms before due
+    g_fakeNow = base + 150; // 50 ms before due (wraps)
     TEST_ASSERT_FALSE(t.shouldRun(g_fakeNow));
 
     // At/after due time, should run.
-    g_fakeNow = 0xFFFFFFA0UL + 200; // wraps: 0x00000068, exactly due
+    g_fakeNow = base + 200; // exactly due (wraps)
     TEST_ASSERT_TRUE(t.shouldRun(g_fakeNow));
 
-    g_fakeNow = 0xFFFFFFA0UL + 250; // wraps: 0x000000B8, 50 ms late
+    g_fakeNow = base + 250; // 50 ms late (wraps)
     TEST_ASSERT_TRUE(t.shouldRun(g_fakeNow));
 }
 
@@ -295,10 +301,13 @@ static void test_scheduler_execute_picks_latest_due_across_rollover()
     sched.addTask(&t1);
     sched.addTask(&t2);
 
-    g_fakeNow = 0xFFFFFF00UL;
-    t1.enable();                // _nextRunTime = 0xFFFFFF00 (most overdue eventually)
-    g_fakeNow = 0xFFFFFFFEUL;
-    t2.enable();                // _nextRunTime = 0xFFFFFFFE (less overdue)
+    // Anchor near (unsigned long)-1 so the wrap occurs at the host's actual
+    // `unsigned long` width (32-bit on MCUs, 64-bit on the native CI runner).
+    const unsigned long maxMillis = static_cast<unsigned long>(-1); // 0xFF..FF
+    g_fakeNow = maxMillis - 0xFF;
+    t1.enable();                // _nextRunTime = max-0xFF (most overdue eventually)
+    g_fakeNow = maxMillis - 0x01;
+    t2.enable();                // _nextRunTime = max-0x01 (less overdue)
 
     // Advance past wrap. Now both are due, t1 is older.
     g_fakeNow = 0x00000010UL;   // wrapped

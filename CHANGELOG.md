@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-06-26
+
+### Fixed
+- **CI: native unit tests on 64-bit hosts.** The `millis()` rollover tests
+  hardcoded a 32-bit wrap (`0xFFFFFFFF`), which only holds where
+  `unsigned long` is 32-bit (AVR/ARM). On the 64-bit native CI runner the
+  simulated wrap never happened and the tests failed. They now anchor to
+  `(unsigned long)-1`, so the rollover is exercised at the host's real
+  `unsigned long` width. Library behaviour on real MCUs is unchanged.
+- **CI: arduino-lint.** Switched `library-manager: submit` to `update`; the
+  library is already in the Library Manager index, where `submit` errors with
+  rule LP017 ("name in use").
+- **Release workflow: GitHub Release step.** Release notes are now passed via
+  an environment variable and `--notes-file` instead of being interpolated
+  inline into the shell. Backticks/parentheses in the changelog were being
+  evaluated by the shell, which broke the step and skipped the dependent
+  PlatformIO publish.
+
 ## [1.0.4] - 2026-06-26
 
 ### Changed
@@ -97,6 +115,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: quick start, API reference, timing semantics, troubleshooting.
 - Native Unity tests under `test/`.
 
+[1.0.5]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/andrenepomuceno/CriticalTaskScheduler/compare/v1.0.1...v1.0.2

@@ -53,15 +53,20 @@ jobs:
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Pass tag/notes via env, never inline ${{ }} in the script: the
+          # changelog contains backticks/parens that the shell would otherwise
+          # evaluate (command injection), which previously broke this step.
+          TAG: ${{ steps.meta.outputs.tag }}
+          NOTES: ${{ steps.changelog.outputs.notes }}
         run: |
-          TAG="${{ steps.meta.outputs.tag }}"
           # Create release (idempotent: skip if already exists)
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release $TAG already exists — skipping creation."
           else
+            printf '%s\n' "$NOTES" > release-notes.md
             gh release create "$TAG" \
               --title "CriticalTaskScheduler $TAG" \
-              --notes "${{ steps.changelog.outputs.notes }}"
+              --notes-file release-notes.md
           fi
 
   platformio-publish:
